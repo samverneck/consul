@@ -317,13 +317,40 @@ FactoryGirl.define do
     census_code { '01' }
   end
 
+  factory :proceeding do
+    sequence(:title) { |n| "Proceeding #{n}" }
+    short_description "This is the short description"
+    long_description "This is the long description"
+    action_name "Participate on this proceeding"
+  end
+
+  factory :proceeding_line, class: 'Proceeding::Line' do
+    proceeding
+    sequence(:title) { |n| "Line #{n}" }
+    action_name "Participate in this proceeding line"
+    type "Debate"
+  end
+
+  factory :proceeding_line_section, class: 'Proceeding::Line' do
+    proceeding
+    sequence(:title) { |n| "Section #{n}" }
+  end
+
+  factory :proceeding_line_proposal, class: 'Proceeding::SubProceeding::Proposal' do
+    line
+    association :author, factory: :user
+    sequence(:title) { |n| "Suggestion #{n}" }
+    description "A suggestion"
+  end
+
   factory :banner do
     sequence(:title) { |n| "Banner title #{n}" }
     sequence(:description)  { |n| "This is the text of Banner #{n}" }
     style {["banner-style-one", "banner-style-two", "banner-style-three"].sample}
     image {["banner.banner-img-one", "banner.banner-img-two", "banner.banner-img-three"].sample}
     target_url {["/proposals", "/debates" ].sample}
-    post_started_at Time.now - 7.days 
-    post_ended_at Time.now + 7.days 
+    post_started_at Time.now - 7.days
+    post_ended_at Time.now + 7.days
   end
+
 end
